@@ -22,18 +22,18 @@ jobs:
           --health-cmd="mysqladmin ping -h 127.0.0.1"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=5
+          --health-retries=10
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-          coverage: xdebug
+          php-version: '8.3'
           tools: composer:v2
+          coverage: xdebug
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -54,7 +54,16 @@ jobs:
         run: cp .env.testing .env
 
       - name: Generate Application Key
-        run: php artisan key:generate
+        run: php artisan key:generate --env=testing
+
+      - name: Wait for MySQL to be ready
+        run: |
+          echo "⌛ Waiting for MySQL to be ready..."
+          for i in {1..10}; do
+            nc -z mysql 3306 && echo "✅ MySQL is up!" && break
+            echo "⏳ MySQL still unavailable - sleeping 3s..."
+            sleep 3
+          done
 
       - name: Run Database Migrations
         run: php artisan migrate --env=testing --force
