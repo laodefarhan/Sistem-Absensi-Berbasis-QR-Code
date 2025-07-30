@@ -2,17 +2,27 @@ name: tests
 
 on:
   push:
-    branches:
-      - develop
-      - main
+    branches: [main, develop]
   pull_request:
-    branches:
-      - develop
-      - main
+    branches: [main, develop]
 
 jobs:
   ci:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: sistem_absensi_berbasis_qr_code_testing
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Checkout
@@ -21,11 +31,11 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
-          tools: composer:v2
+          php-version: '8.2'
           coverage: xdebug
+          tools: composer:v2
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -34,17 +44,20 @@ jobs:
       - name: Install Node Dependencies
         run: npm ci
 
-      - name: Build Assets
+      - name: Build Frontend Assets
         run: npm run build
 
-      - name: Install Dependencies
+      - name: Install PHP Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Copy Environment File
-        run: cp .env.example .env
+      - name: Copy .env.testing to .env
+        run: cp .env.testing .env
 
       - name: Generate Application Key
         run: php artisan key:generate
 
-      - name: Tests
-        run: ./vendor/bin/pest
+      - name: Run Database Migrations
+        run: php artisan migrate --env=testing --force
+
+      - name: Run Tests
+        run: vendor/bin/pest
