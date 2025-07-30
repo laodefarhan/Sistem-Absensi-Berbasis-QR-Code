@@ -2,40 +2,30 @@ name: tests
 
 on:
   push:
-    branches: [main, develop]
+    branches:
+      - develop
+      - main
   pull_request:
-    branches: [main, develop]
+    branches:
+      - develop
+      - main
 
 jobs:
   ci:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: sistem_absensi_berbasis_qr_code_testing
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: 8.4
           tools: composer:v2
           coverage: xdebug
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -44,29 +34,17 @@ jobs:
       - name: Install Node Dependencies
         run: npm ci
 
-      - name: Build Frontend Assets
+      - name: Build Assets
         run: npm run build
 
-      - name: Install PHP Dependencies
+      - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Copy .env.testing to .env
-        run: cp .env.testing .env
+      - name: Copy Environment File
+        run: cp .env.example .env
 
       - name: Generate Application Key
-        run: php artisan key:generate --env=testing
+        run: php artisan key:generate
 
-      - name: Wait for MySQL to be ready
-        run: |
-          echo "⌛ Waiting for MySQL to be ready..."
-          for i in {1..10}; do
-            nc -z mysql 3306 && echo "✅ MySQL is up!" && break
-            echo "⏳ MySQL still unavailable - sleeping 3s..."
-            sleep 3
-          done
-
-      - name: Run Database Migrations
-        run: php artisan migrate --env=testing --force
-
-      - name: Run Tests
-        run: vendor/bin/pest
+      - name: Tests
+        run: ./vendor/bin/pest
