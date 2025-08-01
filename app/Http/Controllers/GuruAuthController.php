@@ -54,7 +54,7 @@ class GuruAuthController extends Controller
 
         if (Auth::guard('guru')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended(route('guru.dashboard'));
+            return redirect()->route('guru.dashboard');
         }
 
         return back()->withErrors([

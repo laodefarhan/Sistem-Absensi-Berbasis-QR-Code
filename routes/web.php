@@ -30,11 +30,5 @@ Route::middleware(['auth:guru'])->group(function () {
 // Route logout dari dashboard guru
 Route::post('/guru/logout', [GuruAuthController::class, 'logout'])->name('guru.logout');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-});
-
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
