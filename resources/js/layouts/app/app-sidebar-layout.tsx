@@ -1,7 +1,7 @@
-import { AppContent } from '@/components/app-content';
-import { AppShell } from '@/components/app-shell';
+import { AppContent } from '@/components/guru/app-content';
+import { AppShell } from '@/components/guru/app-shell';
 import { AppSidebar } from '@/components/guru/app-sidebar';
-import { AppSidebarHeader } from '@/components/app-sidebar-header';
+import { AppSidebarHeader } from '@/components/guru/app-sidebar-header';
 import { type BreadcrumbItem } from '@/types';
 import { type PropsWithChildren } from 'react';
 
