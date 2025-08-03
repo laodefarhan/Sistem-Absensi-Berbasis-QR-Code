@@ -2,6 +2,7 @@
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\GuruAuthController;
 
 /*
@@ -22,13 +23,23 @@ Route::post('/guru/login', [GuruAuthController::class, 'login']);
 Route::get('/guru/register', [GuruAuthController::class, 'showRegisterForm'])->name('guru.register');
 Route::post('/guru/register', [GuruAuthController::class, 'register']);
 
-// Route logout dari dashboard guru
-Route::post('/guru/logout', [GuruAuthController::class, 'logout'])->name('guru.logout');
-
 // Route yang hanya bisa diakses jika guru sudah login
 Route::middleware(['auth:guru'])->group(function () {
     Route::get('/guru/dashboard', fn() => Inertia::render('dashboard-guru'))->name('guru.dashboard');
+
+    Route::resource('/guru/kelas', KelasController::class)->names([
+        'index' => 'kelas.index',
+        'create' => 'kelas.create',
+        'store' => 'kelas.store',
+        'show' => 'kelas.show',
+        'edit' => 'kelas.edit',
+        'update' => 'kelas.update',
+        'destroy' => 'kelas.destroy',
+    ]);
 });
+
+// Route logout dari dashboard guru
+Route::post('/guru/logout', [GuruAuthController::class, 'logout'])->name('guru.logout');
 
 
 Route::middleware(['auth', 'verified'])->group(function () {

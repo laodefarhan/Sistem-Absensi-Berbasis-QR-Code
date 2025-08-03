@@ -10,7 +10,7 @@ import { Link } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Notebook, GraduationCap, UserCog, BookOpenCheck, CalendarDays } from 'lucide-react';
 import AppLogo from '@/components/guru/app-logo';
 
-// Platform
+// Platform Guru
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
@@ -23,7 +23,7 @@ const mainNavItems: NavItem[] = [
 const kelasNavItems: NavItem[] = [
     {
         title: 'Kelas',
-        href: '#',
+        href: '/guru/kelas',
         icon: Notebook,
     },
     {
