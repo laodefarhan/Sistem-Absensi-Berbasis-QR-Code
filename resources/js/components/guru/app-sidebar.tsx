@@ -28,7 +28,7 @@ const kelasNavItems: NavItem[] = [
     },
     {
         title: 'Siswa',
-        href: '#',
+        href: '/guru/siswa',
         icon: GraduationCap,
     },
     {

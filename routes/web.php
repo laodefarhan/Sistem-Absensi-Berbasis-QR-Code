@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\GuruAuthController;
 
 /*
@@ -35,6 +36,17 @@ Route::middleware(['auth:guru'])->group(function () {
         'edit' => 'kelas.edit',
         'update' => 'kelas.update',
         'destroy' => 'kelas.destroy',
+    ]);
+
+    Route::get('/guru/siswa', [SiswaController::class, 'index'])->name('siswa.index');
+    Route::resource('/guru/siswa', SiswaController::class)->names([
+        'index' => 'siswa.index',
+        'create' => 'siswa.create',
+        'store' => 'siswa.store',
+        'show' => 'siswa.show',
+        'edit' => 'siswa.edit',
+        'update' => 'siswa.update',
+        'destroy' => 'siswa.destroy',
     ]);
 });
 
