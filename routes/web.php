@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\GuruAuthController;
+use App\Http\Controllers\WaliKelasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,16 @@ Route::middleware(['auth:guru'])->group(function () {
         'edit' => 'siswa.edit',
         'update' => 'siswa.update',
         'destroy' => 'siswa.destroy',
+    ]);
+
+    Route::resource('/guru/wali_kelas', WaliKelasController::class)->names([
+        'index' => 'wali_kelas.index',
+        'create' => 'wali_kelas.create',
+        'store' => 'wali_kelas.store',
+        'show' => 'wali_kelas.show',
+        'edit' => 'wali_kelas.edit',
+        'update' => 'wali_kelas.update',
+        'destroy' => 'wali_kelas.destroy',
     ]);
 });
 

@@ -33,7 +33,7 @@ const kelasNavItems: NavItem[] = [
     },
     {
         title: 'Wali Kelas',
-        href: '#',
+        href: '/guru/wali_kelas',
         icon: UserCog,
     },
 ];
