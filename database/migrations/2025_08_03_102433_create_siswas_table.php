@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nisn')->unique();
             $table->string('nama_lengkap');
             $table->enum('jenis_kelamin', ['Laki-Laki', 'Perempuan']);
-            $table->string('ttl'); // Tempat Tanggal Lahir
+            $table->string('ttl');
             $table->string('agama');
             $table->text('alamat');
             $table->string('nomor_telepon')->nullable();

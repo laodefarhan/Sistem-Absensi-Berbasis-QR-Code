@@ -14,7 +14,7 @@ class SiswaController extends Controller
         // Ambil input pencarian dari query string (?search=...)
         $search = $request->query('search');
 
-        // Ambil data siswa dan filter berdasarkan nama_lengkap atau nisn jika ada input pencarian
+        // Ambil data siswa dan filter berdasarkan nama lengkap atau nisn jika ada input pencarian
         $siswa = Siswa::query()
             ->when($search, function ($query, $search) {
                 $query->where('nama_lengkap', 'like', '%' . $search . '%')

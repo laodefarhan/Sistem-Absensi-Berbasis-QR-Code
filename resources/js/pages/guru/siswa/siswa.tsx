@@ -148,6 +148,25 @@ export default function SiswaIndex() {
                             )}
                         </tbody>
                     </table>
+
+                    {/* Pagination */}
+                    <div className="mt-4">
+                        <nav className="flex flex-col justify-between items-start">
+                            <span className="text-sm text-gray-700 dark:text-white">
+                                Menampilkan {siswa.length} dari {siswa.length} siswa
+                            </span>
+                            {/* Pagination links can be added here if needed */}
+                            <div className="flex space-x-1">
+                                {/* Example pagination links */}
+                                <Link href="#" className="px-3 py-1 text-xs bg-gray-200 rounded">Previous</Link>
+                                <Link href="#" className="px-3 py-1 text-xs bg-gray-200 rounded">1</Link>
+                                <Link href="#" className="px-3 py-1 text-xs bg-gray-200 rounded">2</Link>
+                                <Link href="#" className="px-3 py-1 text-xs bg-gray-200 rounded">3</Link>
+                                <Link href="#" className="px-3 py-1 text-xs bg-gray-200 rounded">Next</Link>
+                                {/* Add more pagination links as needed */}
+                            </div>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </AppLayout>
