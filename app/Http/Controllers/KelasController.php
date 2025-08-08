@@ -9,10 +9,27 @@ use Illuminate\Http\Request;
 class KelasController extends Controller
 {
     // Menampilkan daftar semua data kelas
-    public function index()
+    public function index(Request $request)
     {
-        $kelas = Kelas::all();
-        return Inertia::render('guru/kelas/kelas', ['kelas' => $kelas]);
+        // Ambil input pencarian dari query string (?search=...)
+        $search = $request->query('search');
+
+        // Ambil data siswa dan filter berdasarkan nama lengkap atau nisn jika ada input pencarian
+        $kelas = Kelas::query()
+            ->when($search, function ($query, $search) {
+                $query->where('kelas', 'like', '%' . $search . '%')
+                    ->orWhere('jurusan', 'like', '%' . $search . '%');
+            })
+            ->orderBy('kelas')
+            ->get();
+
+        // Kirim data siswa dan nilai pencarian ke halaman frontend (React)
+        return Inertia::render('guru/kelas/kelas', [
+            'kelas' => $kelas,
+            'filters' => [
+                'search' => $search,
+            ],
+        ]);
     }
 
     // Menampilkan halaman form untuk membuat data kelas baru

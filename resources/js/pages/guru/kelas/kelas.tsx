@@ -1,5 +1,8 @@
 import { Head, usePage, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
+import { useState, useEffect } from 'react';
+import { router } from '@inertiajs/react';
+import { Input } from '@/components/ui/input';
 
 interface Kelas {
     id: number;
@@ -11,6 +14,9 @@ interface Kelas {
 interface PageProps {
     kelas: Kelas[];
     [key: string]: unknown;
+    filters?: {
+        search?: string;
+    };
 }
 
 const breadcrumbs = [
@@ -21,14 +27,35 @@ const breadcrumbs = [
 ];
 
 export default function KelasIndex() {
-    const { kelas } = usePage<PageProps>().props;
+    const { kelas, filters } = usePage<PageProps>().props;
+    const [search, setSearch] = useState(filters?.search || '');
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            router.get('/guru/kelas', { search }, {
+                preserveState: true,
+                replace: true,
+            });
+        }, 500);
+
+        return () => clearTimeout(timeout);
+    }, [search]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Kelas" />
             <div className="p-4">
                 <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-2xl font-bold">Data Kelas</h1>
+                    <div>
+                        <h1 className="text-2xl font-bold">Data Kelas</h1>
+                        <Input
+                            type="text"
+                            placeholder="Cari Kelas..."
+                            className='w-[400px]'
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
                     <Link
                         href="/guru/kelas/create"
                         className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
